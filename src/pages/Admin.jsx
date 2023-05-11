@@ -1,12 +1,30 @@
 import { Box, ButtonGroup } from '@chakra-ui/react';
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import Button from '../components/Button';
 import RenderAddClientFields from '../components/RenderAddClientFields';
+import { getCall } from '../utils/api';
+import { getAllClientUrl } from '../utils/apiUrl';
+import RenderViewClientTable from '../components/RenderViewClientTable';
+import { ToastContext } from '../context/toastContext';
 
 const Admin = () => {
   const [activeSection, setActiveSection] = useState('');
+  const [tableData, setTableData] = useState();
+  const { showToast } = useContext(ToastContext);
   const handleSectionChange = section => {
     setActiveSection(section);
+  };
+  const handleViewClient = async () => {
+    handleSectionChange('clintTable');
+    const res = await getCall(getAllClientUrl);
+    if (res.status === 'SUCCESS') setTableData(res.list);
+    else {
+      showToast({
+        msg: 'Something went wrong please try again',
+        type: 'error',
+      });
+      setActiveSection('');
+    }
   };
   return (
     <Box>
@@ -14,16 +32,16 @@ const Admin = () => {
         <Button variant="primary" onClick={() => handleSectionChange('fields')}>
           Add client
         </Button>
-        <Button
-          variant="secondary"
-          onClick={() => handleSectionChange('table')}
-        >
+        <Button variant="secondary" onClick={handleViewClient}>
           View Client
         </Button>
       </ButtonGroup>
-      {activeSection === 'fields' ? (
-        <RenderAddClientFields handleSectionChange={handleSectionChange} />
-      ) : null}
+      {activeSection &&
+        (activeSection === 'fields' ? (
+          <RenderAddClientFields handleSectionChange={handleSectionChange} />
+        ) : (
+          tableData && <RenderViewClientTable tableData={tableData} />
+        ))}
     </Box>
   );
 };

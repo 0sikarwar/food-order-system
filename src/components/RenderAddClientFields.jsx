@@ -29,7 +29,7 @@ export default function RenderAddClientFields({ handleSectionChange }) {
 
   async function onSubmit(values) {
     const res = await postCall(values.enterDataFields, addClientUrl);
-    if (res.msg === 'SUCCESS') {
+    if (res.status === 'SUCCESS') {
       showToast({ msg: 'Successfully added', type: 'success' });
       handleSectionChange('');
     } else {
