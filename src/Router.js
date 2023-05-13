@@ -4,6 +4,7 @@ import React from 'react';
 import Home from './pages/Home';
 import EnterData from './pages/EnterData';
 import Admin from './pages/Admin';
+import ViewQr from './pages/ViewQr';
 
 const Router = () => {
   return (
@@ -11,6 +12,7 @@ const Router = () => {
       <Route path="/" exact element={<Home />} />
       <Route path="/enter-data" exact element={<EnterData />} />
       <Route path="/admin" exact element={<Admin />} />
+      <Route path="/:id/viewqr" exact element={<ViewQr />} />
     </Routes>
   );
 };

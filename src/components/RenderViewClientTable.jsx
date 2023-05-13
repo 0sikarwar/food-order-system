@@ -1,7 +1,11 @@
+import { Box } from '@chakra-ui/react';
 import ReactDataTable from 'data-table-reactjs';
 import { useRef } from 'react';
 import { snakeToCamel } from '../utils/index';
-const actions = [
+import qrCodeIcon from '../assets/images/qrCodeScan.svg';
+import { useNavigate } from 'react-router-dom';
+
+const getActions = navigate => [
   {
     key: 'viewDetails',
     handler: (index, item) => {
@@ -9,10 +13,24 @@ const actions = [
     },
     label: 'View record',
   },
+  {
+    key: 'viewQr',
+    handler: (index, item) => {
+      navigate(`/${item.id}/viewqr`);
+    },
+    label: (
+      <img
+        src={qrCodeIcon}
+        alt="View table QRs"
+        width="24px"
+        title="View table QRs"
+      />
+    ),
+  },
 ];
 
-const filterableCol = [];
-const sortableCol = [];
+const filterableCol = ['name', 'mobile', 'email'];
+const sortableCol = ['id'];
 const getColumns = tableData => {
   return Object.keys(tableData[0]).map(key => ({
     name: snakeToCamel(key),
@@ -21,18 +39,29 @@ const getColumns = tableData => {
     sortable: sortableCol.includes(key),
   }));
 };
-console.log(snakeToCamel('test_frdt_zrd'));
 const RenderViewClientTable = ({ tableData }) => {
   const columns = useRef(getColumns(tableData));
+  const navigate = useNavigate();
+  const actions = useRef(getActions(navigate));
   return (
-    <ReactDataTable
-      title="Title of the table"
-      columns={columns.current}
-      list={tableData}
-      actions={actions}
-      // showSerialNumber
-      pagination
-    />
+    <Box height="85vh" marginTop="10px">
+      <ReactDataTable
+        title="All Clients"
+        columns={columns.current}
+        list={tableData}
+        actions={actions.current}
+        initiallyVisibleCol={[
+          'id',
+          'name',
+          'location',
+          'email',
+          'reg_table_count',
+          'mobile',
+        ]}
+        pagination
+        hideOptionToSelectCol
+      />
+    </Box>
   );
 };
 

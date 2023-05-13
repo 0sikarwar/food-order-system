@@ -1,10 +1,11 @@
 import React, { useContext, useEffect } from 'react';
-import { ChakraProvider, Box, Grid, useToast } from '@chakra-ui/react';
+import { ChakraProvider, Box, useToast } from '@chakra-ui/react';
 import Router from './Router';
 import { BrowserRouter } from 'react-router-dom';
 import { theme } from './themeStyles/theme';
 import Layout from './components/Layout';
 import { ToastContext } from './context/toastContext';
+import './styles/global.css';
 
 function App() {
   const { toastObj } = useContext(ToastContext);
@@ -23,11 +24,11 @@ function App() {
     <BrowserRouter>
       <ChakraProvider theme={theme}>
         <Box textAlign="center" fontSize="xl">
-          <Grid minH="100vh" p={3}>
+          <Box minH="100vh" p={3}>
             <Layout>
               <Router />
             </Layout>
-          </Grid>
+          </Box>
         </Box>
       </ChakraProvider>
     </BrowserRouter>

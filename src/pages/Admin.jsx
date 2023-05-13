@@ -10,12 +10,14 @@ import { ToastContext } from '../context/toastContext';
 const Admin = () => {
   const [activeSection, setActiveSection] = useState('');
   const [tableData, setTableData] = useState();
+  const [loadingClientData, setLoadingClientData] = useState(false);
   const { showToast } = useContext(ToastContext);
   const handleSectionChange = section => {
     setActiveSection(section);
   };
   const handleViewClient = async () => {
     handleSectionChange('clintTable');
+    setLoadingClientData(true);
     const res = await getCall(getAllClientUrl);
     if (res.status === 'SUCCESS') setTableData(res.list);
     else {
@@ -25,6 +27,7 @@ const Admin = () => {
       });
       setActiveSection('');
     }
+    setLoadingClientData(false);
   };
   return (
     <Box>
@@ -32,7 +35,11 @@ const Admin = () => {
         <Button variant="primary" onClick={() => handleSectionChange('fields')}>
           Add client
         </Button>
-        <Button variant="secondary" onClick={handleViewClient}>
+        <Button
+          variant="secondary"
+          onClick={handleViewClient}
+          isLoading={loadingClientData}
+        >
           View Client
         </Button>
       </ButtonGroup>

@@ -16,6 +16,9 @@ export const buttonStyles = defineStyleConfig({
           LightenDarkenColor(themeColors.primary, 20)
         )(props),
         boxShadow: 'md',
+        _disabled: {
+          bg: themeColors.primary,
+        },
       },
     }),
     secondary: props => ({
@@ -29,6 +32,9 @@ export const buttonStyles = defineStyleConfig({
           LightenDarkenColor(themeColors.secondary, 20)
         )(props),
         boxShadow: 'md',
+        _disabled: {
+          bg: themeColors.secondary,
+        },
       },
     }),
   },
