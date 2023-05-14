@@ -8,9 +8,9 @@ import {
 } from '@chakra-ui/react';
 import { QRCode } from '../utils/qrCodeGanerator';
 
-export default function QrCodeCard() {
+export default function QrCodeCard({ table, clientId }) {
   const getImageSource = () => {
-    const u = 'https://github.com';
+    const u = `${window.location.origin}/${clientId}/${table}`;
     const s = QRCode.generatePNG(u, {
       ecclevel: 'M',
       format: 'html',
@@ -23,38 +23,37 @@ export default function QrCodeCard() {
   };
 
   return (
-    <Center py={12}>
-      <Box
-        role={'group'}
-        p={6}
-        maxW={'330px'}
-        w={'full'}
-        bg={useColorModeValue('white', 'gray.800')}
-        boxShadow={'xl'}
-        rounded={'lg'}
-        pos={'relative'}
-        border={'0.5px solid #e6e6e6'}
-      >
-        <Box rounded={'lg'} pos={'relative'} height={'230px'}>
-          <Image
-            rounded={'lg'}
-            height={230}
-            width={282}
-            objectFit={'cover'}
-            src={getImageSource()}
-          />
-        </Box>
-        <Stack pt={5} align={'center'}>
-          <Text color={'gray.500'} fontSize={'sm'} textTransform={'uppercase'}>
-            {`Table ${1} QR CODE`}
-          </Text>
-        </Stack>
-        <Stack direction={'column'} align={'center'}>
-          <Text fontWeight={800} fontSize={'xl'} cursor={'pointer'}>
-            Download Code
-          </Text>
-        </Stack>
+    <Box
+      role={'group'}
+      p={6}
+      maxW={'330px'}
+      w={'full'}
+      bg={useColorModeValue('white', 'gray.800')}
+      boxShadow={'xl'}
+      rounded={'lg'}
+      pos={'relative'}
+      border={'0.5px solid #e6e6e6'}
+      m={5}
+    >
+      <Box rounded={'lg'} pos={'relative'} height={'230px'}>
+        <Image
+          rounded={'lg'}
+          height={230}
+          width={282}
+          objectFit={'cover'}
+          src={getImageSource()}
+        />
       </Box>
-    </Center>
+      <Stack pt={5} align={'center'}>
+        <Text color={'gray.500'} fontSize={'sm'} textTransform={'uppercase'}>
+          Table <strong>{table + 1}</strong> QR CODE
+        </Text>
+      </Stack>
+      <Stack direction={'column'} align={'center'}>
+        <Text fontWeight={800} fontSize={'xl'} cursor={'pointer'}>
+          Download Code
+        </Text>
+      </Stack>
+    </Box>
   );
 }

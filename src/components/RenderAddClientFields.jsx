@@ -33,7 +33,12 @@ export default function RenderAddClientFields({ handleSectionChange }) {
       showToast({ msg: 'Successfully added', type: 'success' });
       handleSectionChange('');
     } else {
-      showToast({ msg: 'Something went wrong', type: 'error' });
+      const obj = { msg: 'Something went wrong', type: 'error' };
+      if (res.code === 'ER_DUP_ENTRY') {
+        obj.msg = res.msg;
+        obj.duration = 9000;
+      }
+      showToast(obj);
     }
   }
 

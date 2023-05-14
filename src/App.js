@@ -15,11 +15,14 @@ function App() {
       toast({
         title: toastObj.msg,
         status: toastObj.type,
-        duration: 3000,
+        duration: toastObj.duration || 3000,
         position: 'top-right',
         isClosable: true,
       });
   }, [toastObj]);
+  useEffect(() => {
+    console.log('app deployed');
+  }, []);
   return (
     <BrowserRouter>
       <ChakraProvider theme={theme}>

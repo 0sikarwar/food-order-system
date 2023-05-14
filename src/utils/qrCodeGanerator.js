@@ -1,3 +1,4 @@
+/* eslint-disable */
 var VERSIONS = [
   null,
   [[10, 7, 17, 13], [1, 1, 1, 1], []],

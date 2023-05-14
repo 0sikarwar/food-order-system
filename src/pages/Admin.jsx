@@ -47,7 +47,12 @@ const Admin = () => {
         (activeSection === 'fields' ? (
           <RenderAddClientFields handleSectionChange={handleSectionChange} />
         ) : (
-          tableData && <RenderViewClientTable tableData={tableData} />
+          tableData && (
+            <RenderViewClientTable
+              tableData={tableData}
+              setTableData={setTableData}
+            />
+          )
         ))}
     </Box>
   );

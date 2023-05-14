@@ -3,7 +3,7 @@ export const ADD_CLIENT_FIELDS = {
   location: '',
   email: '',
   mobile: '',
-  reg_table_count: '',
+  reg_table_count: 0,
   plan_expiry: '',
   plan_name: '',
   base_url_name: '',
