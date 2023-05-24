@@ -96,7 +96,7 @@ export default function RenderAddClientFields({ handleSectionChange }) {
             variant="outline"
             onClick={() => append({ ...ADD_CLIENT_FIELDS })}
           >
-            Add more item
+            Add more client
           </Button>
           <Button colorScheme="teal" isLoading={isSubmitting} type="submit">
             Submit

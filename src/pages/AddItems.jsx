@@ -6,8 +6,16 @@ import {
   INITIAL_FIELDS,
 } from '../utils/fields/enterDataFields';
 import SearchSelect from '../components/SearchSelect';
+import { postCall } from '../utils/api';
+import { addItemsUrl } from '../utils/apiUrl';
+import { useNavigate, useParams } from 'react-router-dom';
+import { ToastContext } from '../context/toastContext';
+import { useContext } from 'react';
 
-export default function HookForm() {
+export default function EnterData() {
+  const { showToast } = useContext(ToastContext);
+  const navigate = useNavigate();
+
   const {
     register,
     control,
@@ -18,18 +26,26 @@ export default function HookForm() {
       enterDataFields: [{ ...INITIAL_FIELDS }],
     },
   });
+  const { client_id } = useParams();
   const { fields, append, remove } = useFieldArray({
     control,
     name: 'enterDataFields',
   });
 
-  function onSubmit(values) {
-    return new Promise(resolve => {
-      setTimeout(() => {
-        console.log('values', values);
-        resolve();
-      }, 3000);
-    });
+  async function onSubmit(values) {
+    const payload = {
+      client_id,
+      ...values,
+    };
+    const res = await postCall(payload, addItemsUrl);
+    if (res.status === 'SUCCESS') {
+      navigate(`/${client_id}/view-items`);
+    } else {
+      showToast({
+        msg: res.msg,
+        type: 'error',
+      });
+    }
   }
 
   return (
@@ -79,7 +95,7 @@ export default function HookForm() {
               <RenderField
                 fieldObj={fieldObj}
                 index={index}
-                keyName="desc"
+                keyName="item_desc"
                 register={register}
                 errors={errors}
                 fieldsParamsObj={enterDataFieldsParmas}
@@ -92,7 +108,7 @@ export default function HookForm() {
                   options={enterDataFieldsParmas.categories.list}
                   placeholder={enterDataFieldsParmas.categories.palaceholder}
                   label={enterDataFieldsParmas.categories.label}
-                  rules={{ required: 'Please select a category' }}
+                  rules={{ ...enterDataFieldsParmas.categories.validations }}
                 />
               </Flex>
               {fields?.length > 1 && (

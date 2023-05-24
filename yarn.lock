@@ -4550,10 +4550,10 @@ damerau-levenshtein@^1.0.8:
   resolved "https://registry.npmjs.org/damerau-levenshtein/-/damerau-levenshtein-1.0.8.tgz"
   integrity sha512-sdQSFB7+llfUcQHUQO3+B8ERRj0Oa4w9POWMI/puGtuf7gFywGmkaLCElnudfTiKZV+NvHqL0ifzdrI8Ro7ESA==
 
-data-table-reactjs@^0.2.3:
-  version "0.2.3"
-  resolved "https://registry.npmjs.org/data-table-reactjs/-/data-table-reactjs-0.2.3.tgz#ddf5c023e3b7a9b6db6afad1c35b908167aeb090"
-  integrity sha512-ZlzsCFd2AQvlvosgnxWDF6H3NS5OEN63cVg/9ghx0uLTjeEQsiMl/jIwndPMVvE83DRzgi9fWHnhjkCmJocW6Q==
+data-table-reactjs@^0.2.31:
+  version "0.2.31"
+  resolved "https://registry.npmjs.org/data-table-reactjs/-/data-table-reactjs-0.2.31.tgz#23de04b264879bd07901d2f8e5079dad97661bfa"
+  integrity sha512-5yMWQmxybzf7owT6doOybHpYjr2pLMlURw6r7dd9+h5OXZBWcE5eibK6Py9Isa3gZqNAJJstHXh6c3m52+h9nQ==
 
 data-urls@^2.0.0:
   version "2.0.0"

@@ -9,7 +9,7 @@ export const INITIAL_FIELDS = {
   name: '',
   half: '',
   full: '',
-  desc: '',
+  item_desc: '',
   categories: '',
 };
 
@@ -42,8 +42,8 @@ export const enterDataFieldsParmas = {
       },
     },
   },
-  desc: {
-    name: 'desc',
+  item_desc: {
+    name: 'item_desc',
     palaceholder: 'description of the item',
     label: 'Description',
     type: 'textarea',
@@ -54,5 +54,8 @@ export const enterDataFieldsParmas = {
     label: 'Select categories of item',
     type: 'select',
     list: categoryList,
+    validations: {
+      required: 'This is required',
+    },
   },
 };
