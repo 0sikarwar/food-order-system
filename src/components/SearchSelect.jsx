@@ -2,7 +2,15 @@ import { FormControl, FormErrorMessage, FormLabel } from '@chakra-ui/react';
 import { Select } from 'chakra-react-select';
 import { useController } from 'react-hook-form';
 
-const SearchSelect = ({ control, name, id, label, rules, ...props }) => {
+const SearchSelect = ({
+  control = {},
+  name,
+  id,
+  label,
+  rules,
+  isMulti = false,
+  ...props
+}) => {
   const {
     field: { onChange, onBlur, value, ref },
     fieldState: { error },
@@ -17,7 +25,7 @@ const SearchSelect = ({ control, name, id, label, rules, ...props }) => {
       <FormLabel>{label}</FormLabel>
 
       <Select
-        isMulti
+        isMulti={isMulti}
         size="md"
         name={name}
         ref={ref}

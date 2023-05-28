@@ -1,16 +1,11 @@
-import {
-  Box,
-  Center,
-  useColorModeValue,
-  Text,
-  Stack,
-  Image,
-} from '@chakra-ui/react';
+import { Box, useColorModeValue, Text, Stack, Image } from '@chakra-ui/react';
+import { Link } from 'react-router-dom';
 import { QRCode } from '../utils/qrCodeGanerator';
 
 export default function QrCodeCard({ table, clientId }) {
+  const path = `/${clientId}/orderitem/${table}`;
   const getImageSource = () => {
-    const u = `${window.location.origin}/${clientId}/${table}`;
+    const u = `${window.location.origin}${path}`;
     const s = QRCode.generatePNG(u, {
       ecclevel: 'M',
       format: 'html',
@@ -45,7 +40,14 @@ export default function QrCodeCard({ table, clientId }) {
         />
       </Box>
       <Stack pt={5} align={'center'}>
-        <Text color={'gray.500'} fontSize={'sm'} textTransform={'uppercase'}>
+        <Text
+          color={'blue.500'}
+          textDecoration={'underline'}
+          fontSize={'sm'}
+          textTransform={'uppercase'}
+          as={Link}
+          to={path}
+        >
           Table <strong>{table + 1}</strong> QR CODE
         </Text>
       </Stack>

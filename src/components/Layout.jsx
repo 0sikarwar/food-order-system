@@ -8,7 +8,7 @@ const Layout = ({ children }) => {
       <div className="header">
         <WithSubnavigation />
       </div>
-      <Box as="main" mt={'60px'}>
+      <Box as="main" mt={{ base: '48px', md: '48px' }}>
         {children}
       </Box>
     </>

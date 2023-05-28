@@ -35,7 +35,7 @@ function ViewQr() {
           </Heading>
           <Flex wrap={'wrap'}>
             {new Array(clientData.reg_table_count).fill(0).map((_, index) => (
-              <QrCodeCard table={index} clientId={clientData.id} />
+              <QrCodeCard table={index} key={index} clientId={clientData.id} />
             ))}
           </Flex>
         </>
