@@ -8,6 +8,8 @@ import Admin from './pages/Admin';
 import ViewQr from './pages/ViewQr';
 import ViewClients from './pages/ViewClients';
 import OrderItem from './pages/OrderItem';
+import Cart from './pages/Cart';
+import ViewTables from './pages/ViewTables';
 
 const Router = () => {
   return (
@@ -18,11 +20,13 @@ const Router = () => {
       <Route path="/view-clients" exact element={<ViewClients />} />
       <Route path="/admin" exact element={<Admin />} />
       <Route path="/:id/viewqr" exact element={<ViewQr />} />
+      <Route path="/:client_id/view-tables" exact element={<ViewTables />} />
       <Route
         path="/:client_id/orderitem/:table_id"
         exact
         element={<OrderItem />}
       />
+      <Route path="/:client_id/cart/:table_id" exact element={<Cart />} />
     </Routes>
   );
 };

@@ -7,19 +7,22 @@ import { ToastContext } from '../context/toastContext';
 import { getCall } from '../utils/api';
 import { viewItemsUrl } from '../utils/apiUrl';
 import { getColumns } from '../utils';
+import { ItemsContext } from '../context/itemsContext';
 
 const filterableCol = ['name', 'categories'];
 const sortableCol = ['half', 'full'];
 
 const ViewItems = () => {
   const { showToast } = useContext(ToastContext);
+  const { setItemList, itemList } = useContext(ItemsContext);
   const { client_id } = useParams();
   const [isLoading, setIsLoading] = useState(true);
   const [tableData, setTableData] = useState(null);
   const columns = useRef();
 
   async function getItems() {
-    const res = await getCall(viewItemsUrl + client_id);
+    const res = itemList || (await getCall(viewItemsUrl + client_id));
+    if (!itemList) setItemList(res);
     if (res.status === 'SUCCESS') {
       setTableData(res.list);
       if (res.list.length) {

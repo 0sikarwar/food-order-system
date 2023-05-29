@@ -1,7 +1,11 @@
 import React, { useContext, useEffect, useRef, useState } from 'react';
 import { ToastContext } from '../context/toastContext';
-import { useParams } from 'react-router-dom';
-import { addItemInCartUrl, viewItemsUrl } from '../utils/apiUrl';
+import { useNavigate, useParams } from 'react-router-dom';
+import {
+  addItemInCartUrl,
+  getCartDataUrl,
+  viewItemsUrl,
+} from '../utils/apiUrl';
 import { getCall, postCall } from '../utils/api';
 import { Box, Flex } from '@chakra-ui/react';
 import Loader from '../components/Loader';
@@ -9,9 +13,12 @@ import OrderItemCard from '../components/OrderItemCard';
 import CustomDropdown from '../components/CustomDropdown';
 import { snakeToCamel } from '../utils';
 import { ItemsContext } from '../context/itemsContext';
+import CartFooter from '../components/CartFooter';
 
 const OrderItem = () => {
+  const navigate = useNavigate();
   const { showToast } = useContext(ToastContext);
+  const { setItemList, itemList } = useContext(ItemsContext);
   const { client_id, table_id } = useParams();
   const [isLoading, setIsLoading] = useState(true);
   const actualList = useRef(null);
@@ -21,7 +28,8 @@ const OrderItem = () => {
   const [selectedCategory, setSelectedCategory] = useState('');
   const [selectedItems, setSelectedItems] = useState(null);
   const debouceId = useRef(null);
-  const { cartItem, updateCart } = useContext(ItemsContext);
+  const { cartItem, updateCart, fullCartData, updateFullCart, totalCartItem } =
+    useContext(ItemsContext);
 
   function getAllCat(list) {
     if (list?.length) {
@@ -41,13 +49,13 @@ const OrderItem = () => {
         });
         return res;
       }, {});
-      console.log('list', list);
       setCategoryList(temp1);
       setItemByCategories(temp);
     }
   }
   async function getItems() {
-    const res = await getCall(viewItemsUrl + client_id);
+    const res = itemList || (await getCall(viewItemsUrl + client_id));
+    if (!itemList) setItemList(res);
     if (res.status === 'SUCCESS') {
       getAllCat(res.list);
       setItemsData(res.list);
@@ -77,6 +85,7 @@ const OrderItem = () => {
   }
   useEffect(() => {
     getItems();
+    getCartData();
   }, []);
 
   function handleCatDropdownChange(obj) {
@@ -84,20 +93,24 @@ const OrderItem = () => {
   }
 
   function addToCart(currentItem) {
-    const currentCart = [...(cartItem || [])];
-    console.log('currentCart', currentCart);
+    let currentCart = [...(cartItem || [])];
     let found = false;
+
     for (let i = 0; i < currentCart.length; i++) {
       if (
         currentCart[i].item_id === currentItem.item_id &&
         currentCart[i].price_type === currentItem.price_type
       ) {
-        currentCart[i] = { ...currentItem };
+        if (Number(currentItem.item_count) === 0) {
+          currentCart[i] = null;
+        } else {
+          currentCart[i] = { ...currentItem };
+        }
         found = true;
-        break;
       }
     }
     if (!found) currentCart.push({ ...currentItem });
+    currentCart = currentCart.filter(Boolean);
     updateCart(currentCart);
     if (debouceId.current) clearTimeout(debouceId.current);
     debouceId.current = setTimeout(async () => {
@@ -105,13 +118,36 @@ const OrderItem = () => {
         { cart: currentCart, client_id, table_id },
         addItemInCartUrl
       );
+      updateFullCart(res);
     }, 1000);
   }
-  console.log('cartItem', cartItem);
+
+  async function getCartData() {
+    let url = getCartDataUrl.replace('<cid>', client_id);
+    url = url.replace('<tid>', table_id);
+    const res = fullCartData || (await getCall(url));
+    updateFullCart(res);
+  }
+  useEffect(() => {
+    if (itemList?.list?.length && fullCartData?.list?.length) {
+      const tempCartItems = [];
+      fullCartData.list.forEach(cartItem => {
+        if (cartItem.status === 'cart') {
+          tempCartItems.push({
+            ...cartItem,
+            create_date: undefined,
+            update_date: undefined,
+          });
+        }
+      });
+      updateCart(tempCartItems);
+    }
+  }, [fullCartData, itemList]);
+
   return isLoading ? (
     <Loader />
   ) : (
-    <Box>
+    <Box pb="35px">
       {categoryList?.length && (
         <Box pos="fixed" zIndex={3}>
           <Box pos="sticky" top="60px" zIndex={3}>
@@ -128,7 +164,7 @@ const OrderItem = () => {
       {Object.keys(itemByCategories).map((cat, idx) => {
         return !selectedCategory?.selector ||
           cat === selectedCategory.selector ? (
-          <>
+          <React.Fragment key={idx}>
             <Flex
               position="sticky"
               top="60px"
@@ -147,18 +183,38 @@ const OrderItem = () => {
               {snakeToCamel(cat)}
             </Flex>
             {itemByCategories[cat].map((item, index) => {
+              let cartObj = {};
+              cartItem?.forEach(obj => {
+                if (!obj) return null;
+                if (obj.item_id === item.id) {
+                  cartObj = { ...cartObj, ...obj };
+                  cartObj[obj.price_type] = obj.item_count;
+                }
+              });
+              // cartItem?.find(obj => obj.item_id === item.id) || {};
               return (
                 <OrderItemCard
                   key={'' + idx + index}
                   {...item}
                   filterByCategory={filterByCategory}
                   addToCart={addToCart}
+                  cartObj={cartObj}
                 />
               );
             })}
-          </>
+          </React.Fragment>
         ) : null;
       })}
+      {!!totalCartItem && !!cartItem.length && (
+        <CartFooter
+          itemCount={totalCartItem}
+          typeCount={cartItem.length}
+          btnText="View & Confirm"
+          onBtnClick={() => {
+            navigate(`/${client_id}/cart/${table_id}`);
+          }}
+        />
+      )}
     </Box>
   );
 };

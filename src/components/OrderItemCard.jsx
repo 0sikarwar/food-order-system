@@ -11,7 +11,11 @@ const OrderItemCard = ({
   filterByCategory,
   id,
   addToCart,
+  cartObj,
 }) => {
+  function handleSpinnerChange(value, type) {
+    addToCart({ item_id: id, item_count: value, price_type: type });
+  }
   return (
     <Flex
       direction="column"
@@ -50,7 +54,10 @@ const OrderItemCard = ({
               Half: {`₹${half}`}
             </Text>
             {half && (
-              <MobileSpinner id={id} type="half" addToCart={addToCart} />
+              <MobileSpinner
+                val={cartObj.half || 0}
+                onChange={value => handleSpinnerChange(value, 'half')}
+              />
             )}
           </Flex>
         )}
@@ -58,7 +65,10 @@ const OrderItemCard = ({
           <Text fontSize="14px" fontWeight="500" mr="3px">
             {half ? `Full` : 'Price'}: {`₹${full}`}
           </Text>
-          <MobileSpinner id={id} type="full" addToCart={addToCart} />
+          <MobileSpinner
+            val={cartObj.full || 0}
+            onChange={value => handleSpinnerChange(value, 'full')}
+          />
         </Flex>
       </Flex>
       <Divider my="20px" />

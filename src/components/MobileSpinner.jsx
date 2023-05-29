@@ -1,50 +1,67 @@
-import { Flex, Input, useNumberInput } from '@chakra-ui/react';
-import { useState } from 'react';
-import Button from './Button';
+import {
+  Flex,
+  NumberInput,
+  NumberInputField,
+  NumberInputStepper,
+  NumberIncrementStepper,
+  NumberDecrementStepper,
+} from '@chakra-ui/react';
+import { useEffect, useState } from 'react';
 
-function MobileSpinner({ id, type, addToCart }) {
-  const [prevValue, setPrevValue] = useState('0');
-  const { getInputProps, getIncrementButtonProps, getDecrementButtonProps } =
-    useNumberInput({
-      defaultValue: 0,
-      min: 0,
-      max: 99,
-      precision: 0,
-    });
-
-  const inc = getIncrementButtonProps();
-  const dec = getDecrementButtonProps();
-  const input = getInputProps();
-  function handleChange() {
-    if (prevValue !== input.value) {
-      setPrevValue(input.value);
-      addToCart({ item_id: id, item_count: input.value, price_type: type });
-    }
+function MobileSpinner({ val, onChange }) {
+  const [value, setValue] = useState(0);
+  function handleChange(value) {
+    setValue(value);
+    onChange && onChange(value);
   }
 
+  useEffect(() => {
+    setValue(val);
+  }, [val]);
+
   return (
-    <Flex w="95px">
-      <Button
-        {...inc}
-        px="5px"
-        minWidth="30px"
-        h="30px"
-        borderRightRadius="0"
-        onClick={handleChange}
+    <Flex
+      w="95px"
+      pos="relative"
+      h="30px"
+      border="1px solid #e0dede"
+      borderRadius="5px"
+      value={value}
+    >
+      <NumberInput
+        defaultValue={0}
+        max={99}
+        min={0}
+        clampValueOnBlur={false}
+        onChange={handleChange}
+        value={value}
       >
-        +
-      </Button>
-      <Input {...input} px="5px" h="30px" borderRadius="0" borderX="0" />
-      <Button
-        {...dec}
-        px="5px"
-        minWidth="30px"
-        h="30px"
-        borderLeftRadius="0"
-        onClick={handleChange}
-      >
-        -
-      </Button>
+        <NumberInputField p="5px" w="40%" h="100%" border="0" outline="none" />
+        <NumberInputStepper pos="unset">
+          <NumberIncrementStepper
+            children="+"
+            pos="absolute"
+            left={0}
+            top="0"
+            width="30px"
+            fontSize="18px"
+            h="100%"
+            border="0"
+            outline="none"
+          />
+          <NumberDecrementStepper
+            children="-"
+            pos="absolute"
+            right={0}
+            top="0"
+            width="30px"
+            fontSize="18px"
+            h="100%"
+            border="0"
+            outline="none"
+          />
+        </NumberInputStepper>
+      </NumberInput>
     </Flex>
   );
 }
