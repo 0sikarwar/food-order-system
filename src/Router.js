@@ -10,6 +10,7 @@ import ViewClients from './pages/ViewClients';
 import OrderItem from './pages/OrderItem';
 import Cart from './pages/Cart';
 import ViewTables from './pages/ViewTables';
+import ViewTableCart from './pages/ViewTableCart';
 
 const Router = () => {
   return (
@@ -25,6 +26,11 @@ const Router = () => {
         path="/:client_id/orderitem/:table_id"
         exact
         element={<OrderItem />}
+      />
+      <Route
+        path="/:client_id/view-table-cart/:table_id"
+        exact
+        element={<ViewTableCart />}
       />
       <Route path="/:client_id/cart/:table_id" exact element={<Cart />} />
     </Routes>

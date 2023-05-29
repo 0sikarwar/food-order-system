@@ -2,7 +2,7 @@ import { Flex, Heading, Text } from '@chakra-ui/react';
 import React from 'react';
 import Button from './Button';
 
-const CartFooter = ({ itemCount, typeCount, onBtnClick, btnText }) => {
+const CartFooter = ({ itemCount, typeCount, onBtnClick, btnText, title }) => {
   return (
     <Flex
       alignItems="center"
@@ -17,7 +17,9 @@ const CartFooter = ({ itemCount, typeCount, onBtnClick, btnText }) => {
       zIndex="3"
     >
       <Flex direction="column">
-        <Heading size="sm">Total items in Cart: {itemCount}</Heading>
+        <Heading size="sm">
+          {title || 'Total items in Cart'}: {itemCount}
+        </Heading>
         <Text fontSize="12px">Food item types: {typeCount}</Text>
       </Flex>
       <Button variants="secondary" onClick={onBtnClick}>

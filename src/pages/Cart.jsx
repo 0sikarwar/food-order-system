@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { ItemsContext } from '../context/itemsContext';
 import { getCartDataUrl, placeOrderUrl, viewItemsUrl } from '../utils/apiUrl';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { getCall, postCall } from '../utils/api';
 import { ToastContext } from '../context/toastContext';
 import Loader from '../components/Loader';
@@ -25,11 +25,18 @@ const Cart = () => {
   const [groupedData, setGroupedData] = useState(null);
   const { client_id, table_id } = useParams();
   const { isOpen: isOrderedOpen, onToggle: onOrderedToggle } = useDisclosure();
-
+  const navigate = useNavigate();
   async function getCartData() {
     let url = getCartDataUrl.replace('<cid>', client_id);
     url = url.replace('<tid>', table_id);
     const res = fullCartData || (await getCall(url));
+    if (res.status === 'SUCCESS' && !res.list.length) {
+      showToast({
+        msg: 'No item in cart',
+        type: 'warn',
+      });
+      navigate(`/${client_id}/orderitem/${table_id}`);
+    }
     updateFullCart(res);
   }
 
@@ -41,6 +48,13 @@ const Cart = () => {
     );
     updateFullCart(res);
     setLoading(false);
+    if (res.status === 'SUCCESS') {
+      showToast({
+        msg: 'Order Placed',
+        type: 'success',
+      });
+      navigate(`/${client_id}/orderitem/${table_id}`);
+    }
   }
 
   async function getItems() {
@@ -119,7 +133,7 @@ const Cart = () => {
       {groupedData.cartItems.map((obj, index) => (
         <CartCard key={index} {...obj} />
       ))}
-      {groupedData.orderedItems.length && (
+      {!!groupedData.orderedItems.length && (
         <>
           <Flex
             width="100vw"

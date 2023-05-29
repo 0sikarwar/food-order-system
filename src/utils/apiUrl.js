@@ -8,4 +8,6 @@ export const addItemsUrl = `${basePath}/additems`;
 export const viewItemsUrl = `${basePath}/viewitems?id=`;
 export const addItemInCartUrl = `${basePath}/additemincart`;
 export const getCartDataUrl = `${basePath}/getcartdata?cid=<cid>&tid=<tid>`;
+export const confirmPaymentUrl = `${basePath}/confirmpayment`;
 export const placeOrderUrl = `${basePath}/placeorder`;
+export const viewTableUrl = `${basePath}/viewtables?cid=`;
