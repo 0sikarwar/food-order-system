@@ -7,7 +7,15 @@ import { ToastContext } from '../context/toastContext';
 import Loader from '../components/Loader';
 import CartCard from '../components/CartCard';
 import CartFooter from '../components/CartFooter';
-import { Box, Collapse, Flex, Image, useDisclosure } from '@chakra-ui/react';
+import {
+  Box,
+  Collapse,
+  Flex,
+  Heading,
+  Image,
+  Text,
+  useDisclosure,
+} from '@chakra-ui/react';
 import dropdownArrow from '../assets/images/dropdownArrow.svg';
 
 const Cart = () => {
@@ -129,8 +137,33 @@ const Cart = () => {
         minH="30px"
         alignItems="center"
         fontWeight="700"
+        pos="sticky"
+        top="0"
+        mt="-12px"
       >
-        Cart items
+        <Flex
+          onClick={() => navigate(-1)}
+          alignItems="center"
+          _hover={{ zoom: '102%' }}
+        >
+          <Image
+            src={dropdownArrow}
+            transform="rotate(90deg)"
+            w="50px"
+            h="50px"
+            alt=""
+            pos="absolute"
+            top="-5px"
+            left="0"
+            opacity="0.5"
+          />
+          <Text fontSize="8px" pos="absolute" left="35px" opacity="0.5">
+            Go Back
+          </Text>
+        </Flex>
+        <Heading as="h4" justifyContent="center" w="100%">
+          Cart items
+        </Heading>
       </Flex>
       {groupedData.cartItems.map((obj, index) => (
         <CartCard key={`${obj.item_id} ${obj.price_type} ${index}`} {...obj} />

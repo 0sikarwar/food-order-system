@@ -14,6 +14,7 @@ import CustomDropdown from '../components/CustomDropdown';
 import { snakeToCamel } from '../utils';
 import { ItemsContext } from '../context/itemsContext';
 import CartFooter from '../components/CartFooter';
+import SearchBar from '../components/SearchBar';
 
 const OrderItem = () => {
   const navigate = useNavigate();
@@ -21,6 +22,7 @@ const OrderItem = () => {
   const { setItemList, itemList } = useContext(ItemsContext);
   const { client_id, table_id } = useParams();
   const [isLoading, setIsLoading] = useState(true);
+  const [isLoadingCardData, setIsLoadingCardData] = useState(true);
   const actualList = useRef(null);
   const [itemsData, setItemsData] = useState(null);
   const [itemByCategories, setItemByCategories] = useState(null);
@@ -119,6 +121,7 @@ const OrderItem = () => {
     url = url.replace('<tid>', table_id);
     const res = fullCartData || (await getCall(url));
     updateFullCart(res);
+    setIsLoadingCardData(false);
   }
   useEffect(() => {
     if (itemList?.list?.length && fullCartData?.list?.length) {
@@ -147,13 +150,38 @@ const OrderItem = () => {
     setIsLoading(false);
   }
 
-  return isLoading ? (
+  function handleSearchChange(val) {
+    const list = [...actualList.current];
+    let filteredList = list;
+    if (val)
+      filteredList = list.filter(item =>
+        Object.values(item).toString().includes(val)
+      );
+    setItemsData(filteredList);
+    getAllCat(filteredList);
+  }
+
+  return isLoading || isLoadingCardData ? (
     <Loader />
   ) : (
     <Box pb="35px">
       {categoryList?.length && (
-        <Box pos="fixed" top="60px" zIndex={3}>
-          <Box pos="sticky" top="60px" zIndex={3}>
+        <Box
+          top="0px"
+          zIndex={3}
+          bgColor="#fff"
+          w="100%"
+          left="0"
+          p="20px"
+          pb="5px"
+          pos="sticky"
+          mt={-3}
+        >
+          <Box mb="10px">
+            <SearchBar handleChange={handleSearchChange} />
+          </Box>
+
+          <Box pos="fixed" zIndex={3} top="85px">
             <CustomDropdown
               options={categoryList}
               selected={selectedCategory}
@@ -170,7 +198,7 @@ const OrderItem = () => {
           <React.Fragment key={idx}>
             <Flex
               position="sticky"
-              top="60px"
+              top="85px"
               width="100vw"
               left="0"
               ml="-12px"
