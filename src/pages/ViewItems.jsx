@@ -8,6 +8,7 @@ import { getCall } from '../utils/api';
 import { viewItemsUrl } from '../utils/apiUrl';
 import { getColumns } from '../utils';
 import { ItemsContext } from '../context/itemsContext';
+import Layout from '../components/Layout';
 
 const filterableCol = ['name', 'categories'];
 const sortableCol = ['half', 'full'];
@@ -45,29 +46,31 @@ const ViewItems = () => {
     getItems();
   }, []);
   return (
-    <Box height="85vh" marginTop="10px">
-      {isLoading || !tableData.length ? (
-        <Loader />
-      ) : (
-        <ReactDataTable
-          title="All Items"
-          columns={columns.current}
-          list={tableData}
-          // actions={actions.current}
-          initiallyVisibleCol={[
-            'name',
-            'categories',
-            'full',
-            'half',
-            'item_desc',
-            'order_count',
-          ]}
-          pagination
-          hideOptionToSelectCol
-          showSerialNumber
-        />
-      )}
-    </Box>
+    <Layout>
+      <Box height="85vh" marginTop="10px">
+        {isLoading || !tableData.length ? (
+          <Loader />
+        ) : (
+          <ReactDataTable
+            title="All Items"
+            columns={columns.current}
+            list={tableData}
+            // actions={actions.current}
+            initiallyVisibleCol={[
+              'name',
+              'categories',
+              'full',
+              'half',
+              'item_desc',
+              'order_count',
+            ]}
+            pagination
+            hideOptionToSelectCol
+            showSerialNumber
+          />
+        )}
+      </Box>
+    </Layout>
   );
 };
 

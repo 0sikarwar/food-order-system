@@ -32,13 +32,16 @@ const CartCard = ({ item_count, item_id, price_type, item, disabled }) => {
     currentCart = currentCart.filter(Boolean);
     updateCart(currentCart);
     if (debouceId.current) clearTimeout(debouceId.current);
-    debouceId.current = setTimeout(async () => {
-      const res = await postCall(
-        { cart: currentCart, client_id, table_id },
-        addItemInCartUrl
-      );
-      updateFullCart(res);
-    }, 500);
+    debouceId.current = setTimeout(
+      async () => {
+        const res = await postCall(
+          { cart: currentCart, client_id, table_id },
+          addItemInCartUrl
+        );
+        updateFullCart(res);
+      },
+      currentCart?.length ? 500 : 0
+    );
   }
   return (
     <>

@@ -112,14 +112,6 @@ const OrderItem = () => {
     if (!found) currentCart.push({ ...currentItem });
     currentCart = currentCart.filter(Boolean);
     updateCart(currentCart);
-    if (debouceId.current) clearTimeout(debouceId.current);
-    debouceId.current = setTimeout(async () => {
-      const res = await postCall(
-        { cart: currentCart, client_id, table_id },
-        addItemInCartUrl
-      );
-      updateFullCart(res);
-    }, 1000);
   }
 
   async function getCartData() {
@@ -144,12 +136,23 @@ const OrderItem = () => {
     }
   }, [fullCartData, itemList]);
 
+  async function handleViewClick() {
+    setIsLoading(true);
+    const res = await postCall(
+      { cart: cartItem, client_id, table_id },
+      addItemInCartUrl
+    );
+    updateFullCart(res);
+    navigate(`/${client_id}/cart/${table_id}`);
+    setIsLoading(false);
+  }
+
   return isLoading ? (
     <Loader />
   ) : (
     <Box pb="35px">
       {categoryList?.length && (
-        <Box pos="fixed" zIndex={3}>
+        <Box pos="fixed" top="60px" zIndex={3}>
           <Box pos="sticky" top="60px" zIndex={3}>
             <CustomDropdown
               options={categoryList}
@@ -210,9 +213,7 @@ const OrderItem = () => {
           itemCount={totalCartItem}
           typeCount={cartItem.length}
           btnText="View & Confirm"
-          onBtnClick={() => {
-            navigate(`/${client_id}/cart/${table_id}`);
-          }}
+          onBtnClick={handleViewClick}
         />
       )}
     </Box>

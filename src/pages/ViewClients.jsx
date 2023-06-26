@@ -14,6 +14,7 @@ import { deleteCall, getCall } from '../utils/api';
 import Loader from '../components/Loader';
 import { deleteClientUrl, getAllClientUrl } from '../utils/apiUrl';
 import { ToastContext } from '../context/toastContext';
+import Layout from '../components/Layout';
 
 const getActions = (navigate, setDeleteRes) => [
   {
@@ -130,27 +131,29 @@ const ViewClients = () => {
     getClients();
   }, []);
   return (
-    <Box height="85vh" marginTop="10px">
-      {tableData ? (
-        <ReactDataTable
-          title="All Clients"
-          columns={columns.current}
-          list={tableData}
-          actions={actions.current}
-          initiallyVisibleCol={[
-            'name',
-            'location',
-            'email',
-            'reg_table_count',
-            'mobile',
-          ]}
-          pagination
-          hideOptionToSelectCol
-        />
-      ) : (
-        <Loader />
-      )}
-    </Box>
+    <Layout>
+      <Box height="85vh" marginTop="10px">
+        {tableData ? (
+          <ReactDataTable
+            title="All Clients"
+            columns={columns.current}
+            list={tableData}
+            actions={actions.current}
+            initiallyVisibleCol={[
+              'name',
+              'location',
+              'email',
+              'reg_table_count',
+              'mobile',
+            ]}
+            pagination
+            hideOptionToSelectCol
+          />
+        ) : (
+          <Loader />
+        )}
+      </Box>
+    </Layout>
   );
 };
 

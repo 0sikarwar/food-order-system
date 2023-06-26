@@ -3,7 +3,6 @@ import { ChakraProvider, Box, useToast } from '@chakra-ui/react';
 import Router from './Router';
 import { BrowserRouter } from 'react-router-dom';
 import { theme } from './themeStyles/theme';
-import Layout from './components/Layout';
 import { ToastContext } from './context/toastContext';
 import './styles/global.css';
 
@@ -28,9 +27,7 @@ function App() {
       <ChakraProvider theme={theme}>
         <Box textAlign="center" fontSize="xl">
           <Box minH="100vh" p={3}>
-            <Layout>
-              <Router />
-            </Layout>
+            <Router />
           </Box>
         </Box>
       </ChakraProvider>

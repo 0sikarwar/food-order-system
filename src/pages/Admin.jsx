@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import Button from '../components/Button';
 import RenderAddClientFields from '../components/RenderAddClientFields';
 import { useNavigate } from 'react-router-dom';
+import Layout from '../components/Layout';
 
 const Admin = () => {
   const [activeSection, setActiveSection] = useState('');
@@ -14,23 +15,25 @@ const Admin = () => {
     navigate(`/view-clients`);
   };
   return (
-    <Box>
-      <ButtonGroup gap="4">
-        <Button
-          variant="primary"
-          onClick={() => handleSectionChange('fields')}
-          isDisabled={activeSection === 'fields'}
-        >
-          Add client
-        </Button>
-        <Button variant="secondary" onClick={handleViewClient}>
-          View All Clients
-        </Button>
-      </ButtonGroup>
-      {activeSection === 'fields' && (
-        <RenderAddClientFields handleSectionChange={handleSectionChange} />
-      )}
-    </Box>
+    <Layout>
+      <Box>
+        <ButtonGroup gap="4">
+          <Button
+            variant="primary"
+            onClick={() => handleSectionChange('fields')}
+            isDisabled={activeSection === 'fields'}
+          >
+            Add client
+          </Button>
+          <Button variant="secondary" onClick={handleViewClient}>
+            View All Clients
+          </Button>
+        </ButtonGroup>
+        {activeSection === 'fields' && (
+          <RenderAddClientFields handleSectionChange={handleSectionChange} />
+        )}
+      </Box>
+    </Layout>
   );
 };
 

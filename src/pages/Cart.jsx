@@ -82,6 +82,8 @@ const Cart = () => {
   }, []);
 
   useEffect(() => {
+    if (!fullCartData?.list?.length)
+      navigate(`/${client_id}/orderitem/${table_id}`);
     if (itemList?.list?.length && fullCartData?.list?.length) {
       const tempCartItems = [];
       const temp = fullCartData.list.reduce(
@@ -131,7 +133,7 @@ const Cart = () => {
         Cart items
       </Flex>
       {groupedData.cartItems.map((obj, index) => (
-        <CartCard key={index} {...obj} />
+        <CartCard key={`${obj.item_id} ${obj.price_type} ${index}`} {...obj} />
       ))}
       {!!groupedData.orderedItems.length && (
         <>

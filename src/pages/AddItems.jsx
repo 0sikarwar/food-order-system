@@ -11,6 +11,7 @@ import { addItemsUrl } from '../utils/apiUrl';
 import { useNavigate, useParams } from 'react-router-dom';
 import { ToastContext } from '../context/toastContext';
 import { useContext } from 'react';
+import Layout from '../components/Layout';
 
 export default function EnterData() {
   const { showToast } = useContext(ToastContext);
@@ -49,99 +50,101 @@ export default function EnterData() {
   }
 
   return (
-    <VStack w="100%" maxW="836px">
-      <form onSubmit={handleSubmit(onSubmit)} style={{ width: '100%' }}>
-        {fields.map((fieldObj, index) => {
-          return (
-            <Flex
-              key={fieldObj.id}
-              wrap="wrap"
-              border="1px"
-              p={2}
-              borderColor="blue.100"
-              borderRadius={5}
-              boxShadow="sm"
-              mt={2}
-              pos="relative"
+    <Layout>
+      <VStack w="100%" maxW="836px">
+        <form onSubmit={handleSubmit(onSubmit)} style={{ width: '100%' }}>
+          {fields.map((fieldObj, index) => {
+            return (
+              <Flex
+                key={fieldObj.id}
+                wrap="wrap"
+                border="1px"
+                p={2}
+                borderColor="blue.100"
+                borderRadius={5}
+                boxShadow="sm"
+                mt={2}
+                pos="relative"
+              >
+                <RenderField
+                  fieldObj={fieldObj}
+                  index={index}
+                  keyName="name"
+                  register={register}
+                  errors={errors}
+                  fieldsParamsObj={enterDataFieldsParmas}
+                />
+                <Flex mt={2}>
+                  <RenderField
+                    fieldObj={fieldObj}
+                    index={index}
+                    keyName="half"
+                    register={register}
+                    errors={errors}
+                    fieldsParamsObj={enterDataFieldsParmas}
+                    customStyle={{ width: '48%', maxWidth: '195px', mr: 2 }}
+                  />
+                  <RenderField
+                    fieldObj={fieldObj}
+                    index={index}
+                    keyName="full"
+                    register={register}
+                    errors={errors}
+                    fieldsParamsObj={enterDataFieldsParmas}
+                    customStyle={{ width: '48%', maxWidth: '195px', mr: 2 }}
+                  />
+                </Flex>
+                <RenderField
+                  fieldObj={fieldObj}
+                  index={index}
+                  keyName="item_desc"
+                  register={register}
+                  errors={errors}
+                  fieldsParamsObj={enterDataFieldsParmas}
+                />
+                <Flex w="100%" maxW="400px" mr={2}>
+                  <SearchSelect
+                    control={control}
+                    name={`enterDataFields[${index}].categories`}
+                    id={fieldObj.categories + index}
+                    options={enterDataFieldsParmas.categories.list}
+                    placeholder={enterDataFieldsParmas.categories.palaceholder}
+                    label={enterDataFieldsParmas.categories.label}
+                    rules={{ ...enterDataFieldsParmas.categories.validations }}
+                  />
+                </Flex>
+                {fields?.length > 1 && (
+                  <Button
+                    colorScheme="red"
+                    variant="ghost"
+                    alignSelf="center"
+                    size="sm"
+                    pos="absolute"
+                    top={1}
+                    right={1}
+                    onClick={() => remove(index)}
+                  >
+                    Delete
+                  </Button>
+                )}
+              </Flex>
+            );
+          })}
+          <Flex mt={4} justify={['center', 'flex-end']} w="100%" maxW="1240px">
+            <Button
+              mr={4}
+              colorScheme="teal"
+              variant="outline"
+              onClick={() => append({ ...INITIAL_FIELDS })}
             >
-              <RenderField
-                fieldObj={fieldObj}
-                index={index}
-                keyName="name"
-                register={register}
-                errors={errors}
-                fieldsParamsObj={enterDataFieldsParmas}
-              />
-              <Flex mt={2}>
-                <RenderField
-                  fieldObj={fieldObj}
-                  index={index}
-                  keyName="half"
-                  register={register}
-                  errors={errors}
-                  fieldsParamsObj={enterDataFieldsParmas}
-                  customStyle={{ width: '48%', maxWidth: '195px', mr: 2 }}
-                />
-                <RenderField
-                  fieldObj={fieldObj}
-                  index={index}
-                  keyName="full"
-                  register={register}
-                  errors={errors}
-                  fieldsParamsObj={enterDataFieldsParmas}
-                  customStyle={{ width: '48%', maxWidth: '195px', mr: 2 }}
-                />
-              </Flex>
-              <RenderField
-                fieldObj={fieldObj}
-                index={index}
-                keyName="item_desc"
-                register={register}
-                errors={errors}
-                fieldsParamsObj={enterDataFieldsParmas}
-              />
-              <Flex w="100%" maxW="400px" mr={2}>
-                <SearchSelect
-                  control={control}
-                  name={`enterDataFields[${index}].categories`}
-                  id={fieldObj.categories + index}
-                  options={enterDataFieldsParmas.categories.list}
-                  placeholder={enterDataFieldsParmas.categories.palaceholder}
-                  label={enterDataFieldsParmas.categories.label}
-                  rules={{ ...enterDataFieldsParmas.categories.validations }}
-                />
-              </Flex>
-              {fields?.length > 1 && (
-                <Button
-                  colorScheme="red"
-                  variant="ghost"
-                  alignSelf="center"
-                  size="sm"
-                  pos="absolute"
-                  top={1}
-                  right={1}
-                  onClick={() => remove(index)}
-                >
-                  Delete
-                </Button>
-              )}
-            </Flex>
-          );
-        })}
-        <Flex mt={4} justify={['center', 'flex-end']} w="100%" maxW="1240px">
-          <Button
-            mr={4}
-            colorScheme="teal"
-            variant="outline"
-            onClick={() => append({ ...INITIAL_FIELDS })}
-          >
-            Add more item
-          </Button>
-          <Button colorScheme="teal" isLoading={isSubmitting} type="submit">
-            Submit
-          </Button>
-        </Flex>
-      </form>
-    </VStack>
+              Add more item
+            </Button>
+            <Button colorScheme="teal" isLoading={isSubmitting} type="submit">
+              Submit
+            </Button>
+          </Flex>
+        </form>
+      </VStack>
+    </Layout>
   );
 }

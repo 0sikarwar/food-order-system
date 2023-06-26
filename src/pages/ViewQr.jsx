@@ -6,6 +6,7 @@ import { ToastContext } from '../context/toastContext';
 import { Box, Flex, Heading } from '@chakra-ui/react';
 import QrCodeCard from '../components/QrCodeCard';
 import Loader from '../components/Loader';
+import Layout from '../components/Layout';
 
 function ViewQr() {
   const { showToast } = useContext(ToastContext);
@@ -26,23 +27,29 @@ function ViewQr() {
   }, []);
 
   return (
-    <Box>
-      {clientData ? (
-        <>
-          <Heading>
-            QR code for {clientData.reg_table_count} registered table of{' '}
-            {clientData.name}
-          </Heading>
-          <Flex wrap={'wrap'}>
-            {new Array(clientData.reg_table_count).fill(0).map((_, index) => (
-              <QrCodeCard table={index} key={index} clientId={clientData.id} />
-            ))}
-          </Flex>
-        </>
-      ) : (
-        <Loader />
-      )}
-    </Box>
+    <Layout>
+      <Box>
+        {clientData ? (
+          <>
+            <Heading>
+              QR code for {clientData.reg_table_count} registered table of{' '}
+              {clientData.name}
+            </Heading>
+            <Flex wrap={'wrap'}>
+              {new Array(clientData.reg_table_count).fill(0).map((_, index) => (
+                <QrCodeCard
+                  table={index}
+                  key={index}
+                  clientId={clientData.id}
+                />
+              ))}
+            </Flex>
+          </>
+        ) : (
+          <Loader />
+        )}
+      </Box>
+    </Layout>
   );
 }
 

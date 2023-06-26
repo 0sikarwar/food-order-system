@@ -12,6 +12,7 @@ import { Box, Flex, Image, Text } from '@chakra-ui/react';
 import CartCard from '../components/CartCard';
 import Loader from '../components/Loader';
 import CartFooter from '../components/CartFooter';
+import Layout from '../components/Layout';
 
 const ViewTableCart = () => {
   const { client_id, table_id } = useParams();
@@ -117,7 +118,7 @@ const ViewTableCart = () => {
   return loading ? (
     <Loader />
   ) : (
-    <>
+    <Layout>
       <Flex
         width="100vw"
         left="0"
@@ -153,7 +154,7 @@ const ViewTableCart = () => {
             title="Total items ordered"
           />
         )}
-    </>
+    </Layout>
   );
 };
 
